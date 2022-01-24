@@ -12,6 +12,6 @@ class Pokemon(models.Model):
 
 class PokemonEntity(models.Model):
 
-    Lat = models.FloatField()
-    Lon = models.FloatField()
+    lat = models.FloatField()
+    lon = models.FloatField()
     
