@@ -14,18 +14,12 @@ class Pokemon(models.Model):
         null=True, 
         blank=True, 
         on_delete=models.SET_NULL,
+        related_name="next_evolution",
         verbose_name="Из кого эволюционировал"
     )
 
     def __str__(self):
         return self.title_ru
-
-    @property
-    def next_evolution(self):
-        try:
-            return Pokemon.objects.get(previous_evolution=self)
-        except Pokemon.DoesNotExist:
-            return
 
     def to_dict(self, request=None):
         pokemon = {

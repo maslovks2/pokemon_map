@@ -59,9 +59,8 @@ def show_pokemon(request, pokemon_id):
     if previous_evolution:
         pokemon_on_page['previous_evolution'] = previous_evolution.to_dict(request=request)
 
-    next_evolution = requested_pokemon.next_evolution
-    if next_evolution:
-        pokemon_on_page['next_evolution'] = next_evolution.to_dict(request=request)
+    if hasattr(requested_pokemon, 'next_evolution'):
+        pokemon_on_page['next_evolution'] = requested_pokemon.next_evolution.to_dict(request=request)
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in PokemonEntity.objects.filter(pokemon=requested_pokemon):
