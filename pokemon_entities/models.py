@@ -9,9 +9,36 @@ class Pokemon(models.Model):
     image = models.ImageField(null=True, blank=True)
     description = models.TextField(blank=True)
 
+    previous_evolution = models.OneToOneField(
+        "self", 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL,
+        verbose_name="Из кого эволюционировал"
+    )
+
     def __str__(self):
         return self.title_ru
 
+    @property
+    def next_evolution(self):
+        try:
+            return Pokemon.objects.get(previous_evolution=self)
+        except Pokemon.DoesNotExist:
+            return
+
+    def to_dict(self, request=None):
+        pokemon = {
+            'pokemon_id': self.id,
+            'image': self.image,
+            'title_ru': self.title_ru,
+            'title_en': self.title_en,
+            'title_jp': self.title_jp,
+            'description': self.description,
+        }
+        if request:
+            pokemon['img_url'] = request.build_absolute_uri(self.image.url)
+        return pokemon
 
 class PokemonEntity(models.Model):
 

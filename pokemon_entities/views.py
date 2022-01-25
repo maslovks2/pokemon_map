@@ -1,3 +1,4 @@
+from markupsafe import re
 import folium
 import json
 
@@ -29,7 +30,7 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 
 def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    for pokemon_entity in PokemonEntity.objects.all():
+    for pokemon_entity in PokemonEntity.objects.select_related('pokemon').all():
         add_pokemon(
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
@@ -56,14 +57,15 @@ def show_pokemon(request, pokemon_id):
     except Pokemon.DoesNotExist:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-    pokemon_on_page = {
-        'pokemon_id': requested_pokemon.id,
-        'img_url': request.build_absolute_uri(requested_pokemon.image.url),
-        'title_ru': requested_pokemon.title_ru,
-        'title_en': requested_pokemon.title_en,
-        'title_jp': requested_pokemon.title_jp,
-        'description': requested_pokemon.description,
-    }
+    pokemon_on_page = requested_pokemon.to_dict(request=request)
+
+    previous_evolution = requested_pokemon.previous_evolution
+    if previous_evolution:
+        pokemon_on_page['previous_evolution'] = previous_evolution.to_dict(request=request)
+
+    next_evolution = requested_pokemon.next_evolution
+    if next_evolution:
+        pokemon_on_page['next_evolution'] = next_evolution.to_dict(request=request)
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in PokemonEntity.objects.filter(pokemon=requested_pokemon):
