@@ -41,11 +41,11 @@ class PokemonEntity(models.Model):
     lat = models.FloatField(verbose_name="Широта")
     lon = models.FloatField(verbose_name="Долгота")
 
-    appeared_at = models.DateTimeField(verbose_name="Появляется с")
-    dissappeared_ad = models.DateTimeField(verbose_name="Исчезает после")
+    appeared_at = models.DateTimeField(verbose_name="Появляется с", null=True, blank=True)
+    dissappeared_ad = models.DateTimeField(verbose_name="Исчезает после", null=True, blank=True)
 
-    level = models.IntegerField(verbose_name="Уровень")
-    health = models.IntegerField(verbose_name="Здоровье")
-    strength = models.IntegerField(verbose_name="Сила")
-    defence = models.IntegerField(verbose_name="Защита")
-    stamina = models.IntegerField(verbose_name="Выносливость")
+    level = models.IntegerField(verbose_name="Уровень", null=True, blank=True)
+    health = models.IntegerField(verbose_name="Здоровье", null=True, blank=True)
+    strength = models.IntegerField(verbose_name="Сила", null=True, blank=True)
+    defence = models.IntegerField(verbose_name="Защита", null=True, blank=True)
+    stamina = models.IntegerField(verbose_name="Выносливость", null=True, blank=True)
