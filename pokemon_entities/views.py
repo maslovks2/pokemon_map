@@ -39,11 +39,7 @@ def show_all_pokemons(request):
 
     pokemons_on_page = []
     for pokemon in Pokemon.objects.all():
-        pokemons_on_page.append({
-            'pokemon_id': pokemon.id,
-            'img_url': request.build_absolute_uri(pokemon.image.url),
-            'title_ru': pokemon.title_ru,
-        })
+        pokemons_on_page.append(pokemon.to_dict(request=request))
 
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
